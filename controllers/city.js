@@ -28,12 +28,46 @@ const controller = {
       };
     }
     try {
-      let Cities = await City.find(query);
-      res.status(200).json({
-        response: Cities,
-        success: true,
-        message: "Users finded",
+      let cities = await City.find(query);
+      if (cities) {
+        res.status(200).json({
+          success: true,
+          message: "Cities founded",
+          response: cities,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Cities not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
       });
+    }
+  },
+  readOne: async (req, res) => {
+    let { id } = req.params;
+    try {
+      let city = await City.findOne({ _id: id }).populate({
+        path: "userId",
+        select: "name photo -_id",
+      });
+
+      if (city) {
+        res.status(200).json({
+          success: true,
+          message: "City founded",
+          response: city,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "City not founded",
+        });
+      }
     } catch (error) {
       res.status(400).json({
         success: false,
