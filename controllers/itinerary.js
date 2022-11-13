@@ -7,10 +7,7 @@ const controller = {
       query = { cityId: req.query.cityId };
     }
     try {
-      let itineraries = await Itinerary.find(query).populate({
-        path: "userId",
-        select: ""
-      });
+      let itineraries = await Itinerary.find(query);
       if (itineraries) {
         res.status(200).json({
           success: true,
