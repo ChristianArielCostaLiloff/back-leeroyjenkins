@@ -100,6 +100,29 @@ const controller = {
       });
     }
   },
+  destroy:  async (req, res) => {
+    let { id } = req.params;
+    try {
+      let city = await City.deleteOne({ _id: id });
+      if (city) {
+        res.status(200).json({
+          success: true,
+          message: "City deleted",
+          cityId: city._id,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "City not found",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
 };
 
 module.exports = controller;
