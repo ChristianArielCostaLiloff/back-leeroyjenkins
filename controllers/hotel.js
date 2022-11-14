@@ -16,7 +16,6 @@ const controller = {
       });
     }
   },
-
   read: async (req, res) => {
     let query = {};
     let order = {};
@@ -28,8 +27,8 @@ const controller = {
     }
     if (req.query.order) {
       order = {
-        capacity: req.query.order
-      }
+        capacity: req.query.order,
+      };
     }
     try {
       let hotels = await Hotel.find(query).sort(order);
@@ -43,6 +42,33 @@ const controller = {
         res.status(404).json({
           success: false,
           message: "Hotels not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+  readOne: async (req, res) => {
+    let { id } = req.params;
+    try {
+      let hotel = await Hotel.findOne({ _id: id }).populate({
+        path: "userId",
+        select: "name photo -_id",
+      });
+
+      if (hotel) {
+        res.status(200).json({
+          success: true,
+          message: "Hotel founded",
+          response: hotel,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Hotel not founded",
         });
       }
     } catch (error) {
