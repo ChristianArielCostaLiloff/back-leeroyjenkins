@@ -67,6 +67,29 @@ const controller = {
       });
     }
   },
+  destroy:  async (req, res) => {
+    let { id } = req.params;
+    try {
+      let itinerary = await Itinerary.deleteOne({ _id: id });
+      if (itinerary) {
+        res.status(200).json({
+          success: true,
+          message: "Itinerary deleted",
+          cityId: itinerary._id,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Itinerary not found",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
 };
 
 module.exports = controller;
