@@ -8,11 +8,7 @@ describe("GET /api/city", () => {
     request(app)
       .get("/api/city")
       .expect((response) => {
-        assert.typeOf(
-          response.body.response,
-          "array",
-          "Is not an array"
-        );
+        assert.typeOf(response.body.response, "array", "Is not an array");
         response.body.response.forEach((city) => assert.isObject(city));
       })
       .end((err, res) => {
