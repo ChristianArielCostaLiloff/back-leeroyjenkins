@@ -27,6 +27,12 @@ const controller = {
         name: { $regex: req.query.name, $options: "i" },
       };
     }
+    if (req.query.userId) {
+      query = {
+        ...query,
+        userId: req.query.userId,
+      };
+    }
     try {
       let cities = await City.find(query);
       if (cities) {
@@ -79,7 +85,7 @@ const controller = {
     let { id } = req.params;
     try {
       let city = await City.findOneAndUpdate({ _id: id }, req.body, {
-        new: true
+        new: true,
       });
       if (city) {
         res.status(200).json({
@@ -100,7 +106,7 @@ const controller = {
       });
     }
   },
-  destroy:  async (req, res) => {
+  destroy: async (req, res) => {
     let { id } = req.params;
     try {
       let city = await City.deleteOne({ _id: id });
