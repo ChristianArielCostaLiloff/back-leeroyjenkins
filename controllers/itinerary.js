@@ -21,6 +21,9 @@ const controller = {
     if (req.query.cityId) {
       query = { cityId: req.query.cityId };
     }
+    if (req.query.userId) {
+      query = { userId: req.query.userId };
+    }
     try {
       let itineraries = await Itinerary.find(query);
       if (itineraries) {
@@ -33,6 +36,29 @@ const controller = {
         res.status(404).json({
           success: false,
           message: "Itineraries not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+  readOne: async (req, res) => {
+    let { id } = req.params;
+    try {
+      let itinerary = await Itinerary.findOne({ _id: id });
+      if (itinerary) {
+        res.status(200).json({
+          success: true,
+          message: "Itinerary founded",
+          response: itinerary,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "itinerary not founded",
         });
       }
     } catch (error) {
@@ -75,7 +101,7 @@ const controller = {
         res.status(200).json({
           success: true,
           message: "Itinerary deleted",
-          cityId: itinerary._id,
+          itineraryId: itinerary._id,
         });
       } else {
         res.status(404).json({
