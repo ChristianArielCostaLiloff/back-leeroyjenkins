@@ -42,7 +42,7 @@ describe("POST /api/city", () => {
         done();
       });
   });
-  it("Status 400 when unable to create a city", (done) => {
+  it("Error when unable to create a city", (done) => {
     request(app)
       .post("/api/city")
       .send({
@@ -51,7 +51,7 @@ describe("POST /api/city", () => {
         population: 789722,
         userId: "6370096b26cecde13c02e04b",
       })
-      .expect(400)
+      .expect(res => res.success === false)
       .end((err, res) => {
         if (err) {
           return done(err);
