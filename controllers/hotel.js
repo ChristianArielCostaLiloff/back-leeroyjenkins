@@ -25,6 +25,12 @@ const controller = {
         name: { $regex: req.query.name, $options: "i" },
       };
     }
+    if (req.query.userId) {
+      query = {
+        ...query,
+        userId: req.query.userId,
+      };
+    }
     if (req.query.order) {
       order = {
         capacity: req.query.order,
