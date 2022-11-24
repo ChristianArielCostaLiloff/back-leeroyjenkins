@@ -6,6 +6,9 @@ const controller = {
     if (req.query.hotelId) {
       query = { hotelId: req.query.hotelId };
     }
+    if (req.query.userId) {
+      query = { userId: req.query.userId };
+    }
     try {
       let shows = await Show.find(query);
       if (shows) {
@@ -18,6 +21,29 @@ const controller = {
         res.status(404).json({
           success: false,
           message: "Shows not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+  readOne: async (req, res) => {
+    let { id } = req.params;
+    try {
+      let show = await Show.findOne({ _id: id });
+      if (show) {
+        res.status(200).json({
+          success: true,
+          message: "Show founded",
+          response: show,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "show not founded",
         });
       }
     } catch (error) {
