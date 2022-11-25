@@ -22,7 +22,7 @@ const controller = {
       query = { cityId: req.query.cityId };
     }
     if (req.query.userId) {
-      query = { userId: req.query.userId };
+      query = { ...query, userId: req.query.userId };
     }
     try {
       let itineraries = await Itinerary.find(query);
@@ -72,7 +72,7 @@ const controller = {
     let { id } = req.params;
     try {
       let itinerary = await Itinerary.findOneAndUpdate({ _id: id }, req.body, {
-        new: true
+        new: true,
       });
       if (itinerary) {
         res.status(200).json({
@@ -93,7 +93,7 @@ const controller = {
       });
     }
   },
-  destroy:  async (req, res) => {
+  destroy: async (req, res) => {
     let { id } = req.params;
     try {
       let itinerary = await Itinerary.deleteOne({ _id: id });

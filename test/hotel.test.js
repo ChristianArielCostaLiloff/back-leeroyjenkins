@@ -2,13 +2,12 @@ const app = require("../app");
 const chai = require("chai");
 const assert = chai.assert;
 const request = require("supertest");
-const { response } = require("../app");
 
 describe("GET /api/hotel/", function (done) {
-  it("Hotel not found", function (done) {
+  it("Hotel not found (404)", function (done) {
     request(app)
-      .get("/api/hotel/63716c6edd2cbad3afa942069")
-      .expect(res => res.success === false)
+      .get("/api/hotel/63716c6edd2cbad3afa94209")
+      .expect(404)
       .end(function (err, res) {
         if (err) return done(err);
         done();
@@ -35,15 +34,15 @@ describe("POST /api/hotel", () => {
   });
   it("Hotel created successfully (201)", (done) => {
     request(app)
-      .post("/api/hotel")
+      .post("/api/hotel/")
       .send({
-        name: "Hotel Las Américas Torre del Mar",
-        photo: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0a/de/19/28/las-americas-torre-del.jpg?w=1200&h=-1&s=1",
+        name: "Hotel Las america Torre del Mare",
+        photo: ["http://test.test", "http://test.test", "http://test.test"],
         capacity: 1500,
-        cityId: "63701f25d10c25267b79e291",
-        userId: "6370096b26cecde13c02e04c",
+        cityId: "636d975fff2f61c6a45710b2",
+        userId: "636d82c86529ebe93bbef921",
       })
-      .expect(res => res.success === true)
+      .expect(201)
       .end((err, res) => {
         if (err) {
           return done(err);

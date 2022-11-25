@@ -7,7 +7,7 @@ const controller = {
       query = { hotelId: req.query.hotelId };
     }
     if (req.query.userId) {
-      query = { userId: req.query.userId };
+      query = { ...query, userId: req.query.userId };
     }
     try {
       let shows = await Show.find(query);
@@ -72,7 +72,7 @@ const controller = {
     let { id } = req.params;
     try {
       let show = await Show.findOneAndUpdate({ _id: id }, req.body, {
-        new: true
+        new: true,
       });
       if (show) {
         res.status(200).json({
@@ -93,7 +93,7 @@ const controller = {
       });
     }
   },
-  destroy:  async (req, res) => {
+  destroy: async (req, res) => {
     let { id } = req.params;
     try {
       let show = await Show.deleteOne({ _id: id });

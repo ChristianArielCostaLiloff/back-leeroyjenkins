@@ -2,7 +2,6 @@ const app = require("../app");
 const chai = require("chai");
 const assert = chai.assert;
 const request = require("supertest");
-const { response } = require("../app");
 
 describe("GET /api/city", () => {
   it("Is an array of objects", (done) => {
@@ -51,7 +50,7 @@ describe("POST /api/city", () => {
         population: 789722,
         userId: "6370096b26cecde13c02e04b",
       })
-      .expect(res => res.success === false)
+      .expect((res) => res.success === false)
       .end((err, res) => {
         if (err) {
           return done(err);

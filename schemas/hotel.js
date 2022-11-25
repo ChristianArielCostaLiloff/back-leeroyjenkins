@@ -1,14 +1,14 @@
 const joi = require("joi");
 
 const schema = joi.object({
-  name: joi.string().required().min(3).max(30).messages({
+  name: joi.string().required().min(3).max(50).messages({
     "string.base": "Name must be a text",
     "any.required": "Name is required",
     "string.empty": "The name must not be empty",
     "string.min": "Name must have at least 3 characters",
     "string.max": "Name must not have more than 30 characters",
   }),
-  photo: joi.string().required().uri().messages({
+  photo: joi.array().items(joi.string().uri()).required().messages({
     "string.base": "The url must be a text",
     "any.required": "The url is required",
     "string.empty": "The url must not be empty",
@@ -22,13 +22,13 @@ const schema = joi.object({
     "string.base": "cityId must be a text",
     "any.required": "cityId is required",
     "string.empty": "cityId must not be empty",
-    "string.length": "cityId length must be 24 characters long"
+    "string.length": "cityId length must be 24 characters long",
   }),
   userId: joi.string().hex().length(24).required().messages({
     "string.base": "userId must be a text",
     "any.required": "userId is required",
     "string.empty": "userId must not be empty",
-    "string.length": "userId length must be 24 characters long"
+    "string.length": "userId length must be 24 characters long",
   }),
 });
 
