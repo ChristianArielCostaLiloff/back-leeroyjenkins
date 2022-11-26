@@ -1,7 +1,15 @@
 let router = require("express").Router();
-let { create, read, readOne, update, destroy } = require("../controllers/hotel");
+const validator = require("../middlewares/validator");
+const schema = require("../schemas/hotel");
+let {
+  create,
+  read,
+  readOne,
+  update,
+  destroy,
+} = require("../controllers/hotel");
 
-router.route("/").post(create);
+router.route("/").post(validator(schema), create);
 router.get("/", read);
 router.get("/:id", readOne);
 router.patch("/:id", update);

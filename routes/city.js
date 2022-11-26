@@ -1,10 +1,17 @@
-let router = require("express").Router();
-let { create, read, readOne, update, destroy } = require("../controllers/city");
+const router = require("express").Router();
+const schema = require("../schemas/city");
+const validator = require("../middlewares/validator");
 
-router.route("/").post(create);
-router.route("/").get(read);
-router.route("/:id").get(readOne);
-router.put("/:id", update);
-router.delete("/:id", destroy)
+const {
+  create,
+  read,
+  readOne,
+  update,
+  destroy,
+} = require("../controllers/city");
+
+router.route("/").post(validator(schema), create).get(read);
+
+router.route("/:id").get(readOne).put(update).delete(destroy);
 
 module.exports = router;

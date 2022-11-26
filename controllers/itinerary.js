@@ -21,6 +21,9 @@ const controller = {
     if (req.query.cityId) {
       query = { cityId: req.query.cityId };
     }
+    if (req.query.userId) {
+      query = { ...query, userId: req.query.userId };
+    }
     try {
       let itineraries = await Itinerary.find(query);
       if (itineraries) {
@@ -42,11 +45,34 @@ const controller = {
       });
     }
   },
+  readOne: async (req, res) => {
+    let { id } = req.params;
+    try {
+      let itinerary = await Itinerary.findOne({ _id: id });
+      if (itinerary) {
+        res.status(200).json({
+          success: true,
+          message: "Itinerary founded",
+          response: itinerary,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "itinerary not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
   update: async (req, res) => {
     let { id } = req.params;
     try {
       let itinerary = await Itinerary.findOneAndUpdate({ _id: id }, req.body, {
-        new: true
+        new: true,
       });
       if (itinerary) {
         res.status(200).json({
@@ -67,7 +93,7 @@ const controller = {
       });
     }
   },
-  destroy:  async (req, res) => {
+  destroy: async (req, res) => {
     let { id } = req.params;
     try {
       let itinerary = await Itinerary.deleteOne({ _id: id });
@@ -75,7 +101,7 @@ const controller = {
         res.status(200).json({
           success: true,
           message: "Itinerary deleted",
-          cityId: itinerary._id,
+          itineraryId: itinerary._id,
         });
       } else {
         res.status(404).json({
