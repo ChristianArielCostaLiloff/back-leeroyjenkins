@@ -17,7 +17,8 @@ passport.use(
         if (user) {
           user = {
             name: user.name,
-            lastname: user.lastname,
+            lastName: user.lastName,
+            role: user.role,
             photo: user.photo,
             age: user.age,
             email: user.email,

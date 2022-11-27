@@ -69,6 +69,7 @@ const controller = {
             id: userDb._id,
             name: userDb.name,
             photo: userDb.photo,
+            role: user.role,
             logged: userDb.logged,
           },
           process.env.KEY_JWT,
@@ -93,6 +94,8 @@ const controller = {
           response: {
             name: user.name,
             photo: user.photo,
+            role: user.role,
+            logged: user.logged,
           },
         },
         succes: true,
