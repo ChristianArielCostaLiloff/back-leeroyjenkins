@@ -6,7 +6,7 @@ let itinerary = require('./itinerary')
 let hotel = require('./hotel')
 let show = require('./show')
 
-router.use('/user', user)
+router.use('/auth', user)
 router.use('/city', city)
 router.use('/itinerary', itinerary)
 router.use('/hotel', hotel)
