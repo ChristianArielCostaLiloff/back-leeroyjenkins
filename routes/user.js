@@ -1,8 +1,10 @@
-//primero requerimos el metodo Router() del modulo express para el enrutador especifico
 let router = require("express").Router();
-//desestructurar los metodos que necesitamos de user
-let { create } = require("../controllers/user");
+const validator = require("../middlewares/validator");
+const schema = require("../schemas/user");
+let { register, verify } = require("../controllers/user");
+const { accountExists } = require("../middlewares/accountExistsSingUp");
 
-router.route("/").post(create);
+router.post("/signup", validator(schema), accountExists, register);
+router.get("/verify/:code", verify);
 
 module.exports = router;
