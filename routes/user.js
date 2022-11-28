@@ -6,6 +6,7 @@ let {
   verify,
   signin,
   loginWithToken,
+  signOut,
 } = require("../controllers/user");
 const { accountExists } = require("../middlewares/accountExistsSingUp");
 const schemaSignIn = require("../schemas/signIn");
@@ -31,5 +32,7 @@ router.post(
   mustSignIn,
   loginWithToken
 );
+router.post("/signout", 
+passport.authenticate("jwt", { session: false }), signOut)
 
 module.exports = router;
