@@ -107,16 +107,63 @@ const controller = {
     }
   },
   signOut: async (req, res, next) => {
-    const { _id } = req.user
+    const { _id } = req.user;
     try {
       await User.findOneAndUpdate(
         { _id: _id },
         { logged: false },
         { new: true }
       );
-      return userSignedOutResponse(req, res)
+      return userSignedOutResponse(req, res);
     } catch (error) {
-      next(error)
+      next(error);
+    }
+  },
+  readOne: async (req, res, next) => {
+    let id = req.params.id;
+    try {
+      let user = await User.findById({ _id: id });
+      if (user) {
+        res.status(200).json({
+          success: true,
+          message: "user founded",
+          response: user,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "user not found",
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+  update: async (req, res, next) => {
+    let id = req.params.id;
+    if (req.body.password) {
+      let { password } = req.body;
+      password = bcryptjs.hashSync(password, 10);
+      req.body.password = password;
+    }
+    try {
+      let user = await User.findOneAndUpdate({ _id: id }, req.body, {
+        new: true,
+      });
+      if (user) {
+        res.status(200).json({
+          success: true,
+          message: "user updated",
+          response: user,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "user not found",
+        });
+      }
+    } catch (error) {
+      next(error);
     }
   },
 };
