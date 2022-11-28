@@ -7,6 +7,8 @@ let {
   signin,
   loginWithToken,
   signOut,
+  readOne,
+  update,
 } = require("../controllers/user");
 const { accountExists } = require("../middlewares/accountExistsSingUp");
 const schemaSignIn = require("../schemas/signIn");
@@ -32,7 +34,12 @@ router.post(
   mustSignIn,
   loginWithToken
 );
-router.post("/signout", 
-passport.authenticate("jwt", { session: false }), signOut)
+router.post(
+  "/signout",
+  passport.authenticate("jwt", { session: false }),
+  signOut
+);
+router.get("/me/:id", readOne);
+router.patch("/me/:id", update);
 
 module.exports = router;
