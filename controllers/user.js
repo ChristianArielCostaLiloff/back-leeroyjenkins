@@ -6,6 +6,7 @@ const {
   userSignedUpResponse,
   userNotFoundResponse,
   invalidCredentialsResponse,
+  userSignedOutResponse,
 } = require("../config/responses");
 const { FRONT_URL } = process.env;
 const jwt = require("jsonwebtoken");
@@ -103,6 +104,19 @@ const controller = {
       });
     } catch (error) {
       next(error);
+    }
+  },
+  signOut: async (req, res, next) => {
+    const { _id } = req.user
+    try {
+      await User.findOneAndUpdate(
+        { _id: _id },
+        { logged: false },
+        { new: true }
+      );
+      return userSignedOutResponse(req, res)
+    } catch (error) {
+      next(error)
     }
   },
 };
