@@ -8,7 +8,7 @@ const schema = joi.object({
     "string.min": "Name must have at least 3 characters",
     "string.max": "Name must not have more than 30 characters",
   }),
-  photo: joi.array().items(joi.string().uri()).required().messages({
+  photo: joi.string().required().uri().messages({
     "string.base": "The url must be a text",
     "any.required": "The url is required",
     "string.empty": "The url must not be empty",
