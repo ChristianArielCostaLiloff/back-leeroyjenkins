@@ -93,6 +93,7 @@ const controller = {
       return res.json({
         user: {
           response: {
+            _id: user._id,
             name: user.name,
             photo: user.photo,
             role: user.role,
