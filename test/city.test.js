@@ -59,3 +59,21 @@ describe("POST /api/city", () => {
       });
   });
 });
+
+describe("DELETE /api/city", () => {
+  it("Must delete a city", function (done) {
+    TOKEN =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODQwNDhiMGUyNDRjYmVmMDk4ZDI5NiIsIm5hbWUiOiJHZXJhbGRvIiwicGhvdG8iOiJodHRwczovL2ltZy5ldXJvcGFwcmVzcy5lcy9mb3Rvd2ViL2ZvdG9ub3RpY2lhXzIwMjAwNzI4MTQyMjI2XzQyMC5qcGciLCJyb2xlIjoiYWRtaW4iLCJsb2dnZWQiOnRydWUsImlhdCI6MTY2OTYzNDI5MSwiZXhwIjoxNjY5NzIwNjkxfQ.90rlfFRM1Uj4cJioKujR_ZsN39CW5sg8PWaobg6o1zc";
+    request(app)
+      .delete(`/api/cities/63849c30975387f5f96da311`)
+     // .auth(token, { type: "bearer" })
+      .set('Authorization', `Bearer ${TOKEN}`)
+      .expect(200)
+      .end(function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        done();
+      });
+  });
+});
