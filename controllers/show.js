@@ -54,12 +54,17 @@ const controller = {
     }
   },
   create: async (req, res) => {
+    req.body = {
+      ...req.body,
+      userId: req.user._id,
+    };
     try {
       let new_show = await Show.create(req.body);
       res.status(201).json({
         id: new_show._id,
         success: true,
         message: "Show created successfuly",
+        response: new_show,
       });
     } catch (error) {
       res.status(400).json({
@@ -96,12 +101,12 @@ const controller = {
   destroy: async (req, res) => {
     let { id } = req.params;
     try {
-      let show = await Show.deleteOne({ _id: id });
+      let show = await Show.findOneAndDelete({ _id: id });
       if (show) {
         res.status(200).json({
           success: true,
           message: "Show deleted",
-          hotelId: show._id,
+          showId: show,
         });
       } else {
         res.status(404).json({
