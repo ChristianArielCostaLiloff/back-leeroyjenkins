@@ -2,6 +2,10 @@ const City = require("../models/City");
 
 const controller = {
   create: async (req, res) => {
+    req.body = {
+      ...req.body,
+      userId: req.user._id,
+    };
     try {
       let new_city = await City.create(req.body);
       res.status(201).json({
@@ -109,12 +113,12 @@ const controller = {
   destroy: async (req, res) => {
     let { id } = req.params;
     try {
-      let city = await City.deleteOne({ _id: id });
+      let city = await City.findOneAndDelete({ _id: id });
       if (city) {
         res.status(200).json({
           success: true,
           message: "City deleted",
-          cityId: city._id,
+          cityId: city,
         });
       } else {
         res.status(404).json({
