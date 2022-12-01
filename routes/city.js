@@ -12,12 +12,20 @@ const {
   destroy,
 } = require("../controllers/city");
 
-router.route("/").post(validator(schema), create).get(read);
+router
+  .route("/")
+  .post(
+    validator(schema),
+    passport.authenticate("jwt", { session: false }),
+    create
+  )
+  .get(read);
 
 router
   .route("/:id")
   .get(readOne)
   .put(
+    validator(schema),
     passport.authenticate("jwt", { session: false }),
     cityBelongsUser,
     update

@@ -2,12 +2,16 @@ const Itinerary = require("../models/Itinerary");
 
 const controller = {
   create: async (req, res) => {
+    req.body = {
+      ...req.body,
+      userId: req.user._id,
+    };
     try {
       let new_itinerary = await Itinerary.create(req.body);
       res.status(201).json({
-        id: new_itinerary._id,
         success: true,
         message: "Itinerary created successfuly",
+        response: new_itinerary,
       });
     } catch (error) {
       res.status(400).json({
@@ -96,12 +100,12 @@ const controller = {
   destroy: async (req, res) => {
     let { id } = req.params;
     try {
-      let itinerary = await Itinerary.deleteOne({ _id: id });
+      let itinerary = await Itinerary.findOneAndDelete({ _id: id });
       if (itinerary) {
         res.status(200).json({
           success: true,
           message: "Itinerary deleted",
-          itineraryId: itinerary._id,
+          itineraryId: itinerary,
         });
       } else {
         res.status(404).json({

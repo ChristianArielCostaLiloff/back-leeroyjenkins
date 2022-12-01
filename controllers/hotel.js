@@ -2,6 +2,10 @@ const Hotel = require("../models/Hotel");
 
 const controller = {
   create: async (req, res) => {
+    req.body = {
+      ...req.body,
+      userId: req.user._id,
+    };
     try {
       let new_hotel = await Hotel.create(req.body);
       res.status(201).json({
@@ -88,7 +92,7 @@ const controller = {
     let { id } = req.params;
     try {
       let hotel = await Hotel.findOneAndUpdate({ _id: id }, req.body, {
-        new: true
+        new: true,
       });
       if (hotel) {
         res.status(200).json({
@@ -109,15 +113,15 @@ const controller = {
       });
     }
   },
-  destroy:  async (req, res) => {
+  destroy: async (req, res) => {
     let { id } = req.params;
     try {
-      let hotel = await Hotel.deleteOne({ _id: id });
+      let hotel = await Hotel.findOneAndDelete({ _id: id });
       if (hotel) {
         res.status(200).json({
           success: true,
           message: "Hotel deleted",
-          hotelId: hotel._id,
+          hotelId: hotel,
         });
       } else {
         res.status(404).json({

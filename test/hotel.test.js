@@ -33,14 +33,16 @@ describe("POST /api/hotel", () => {
       });
   });
   it("Hotel created successfully (201)", (done) => {
+    TOKEN =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODQwNDhiMGUyNDRjYmVmMDk4ZDI5NiIsIm5hbWUiOiJHZXJhbGRvIiwicGhvdG8iOiJodHRwczovL2kuYmxvZ3MuZXMvYzM2YWM2L2YuZWxjb25maWRlbmNpYWwuY29tX29yaWdpbmFsXzAzY19mZjRfMjU1XzAzY2ZmNDI1NWMyYTIxMGJhODZhMjZlOTcxYjY5NDlkLzQ1MF8xMDAwLmpwZWciLCJyb2xlIjoiYWRtaW4iLCJsb2dnZWQiOnRydWUsImlhdCI6MTY2OTg4OTY0NywiZXhwIjoxNzAxNDI1NjQ3fQ.wOQvZnFRZYeOSbpH9tmwh6PZ3ry9lz1jGfszyDwihJ0";
     request(app)
       .post("/api/hotel/")
+      .set('Authorization', `Bearer ${TOKEN}`)
       .send({
-        name: "Hotel Las america Torre del Mare",
-        photo: ["http://test.test", "http://test.test", "http://test.test"],
+        name: "Hotel Test",
+        photo: "http://test.test",
         capacity: 1500,
-        cityId: "636d975fff2f61c6a45710b2",
-        userId: "636d82c86529ebe93bbef921",
+        cityId: "638491ac2db464d85a7d6ce6",
       })
       .expect(201)
       .end((err, res) => {
@@ -54,10 +56,11 @@ describe("POST /api/hotel", () => {
 
 describe("DELETE /api/hotel", () => {
   it("Must delete a hotel", function (done) {
+    this.timeout(10000);
     TOKEN =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODQwNDhiMGUyNDRjYmVmMDk4ZDI5NiIsIm5hbWUiOiJHZXJhbGRvIiwicGhvdG8iOiJodHRwczovL2ltZy5ldXJvcGFwcmVzcy5lcy9mb3Rvd2ViL2ZvdG9ub3RpY2lhXzIwMjAwNzI4MTQyMjI2XzQyMC5qcGciLCJyb2xlIjoiYWRtaW4iLCJsb2dnZWQiOnRydWUsImlhdCI6MTY2OTYzNDI5MSwiZXhwIjoxNjY5NzIwNjkxfQ.90rlfFRM1Uj4cJioKujR_ZsN39CW5sg8PWaobg6o1zc";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODQwNDhiMGUyNDRjYmVmMDk4ZDI5NiIsIm5hbWUiOiJHZXJhbGRvIiwicGhvdG8iOiJodHRwczovL2kuYmxvZ3MuZXMvYzM2YWM2L2YuZWxjb25maWRlbmNpYWwuY29tX29yaWdpbmFsXzAzY19mZjRfMjU1XzAzY2ZmNDI1NWMyYTIxMGJhODZhMjZlOTcxYjY5NDlkLzQ1MF8xMDAwLmpwZWciLCJyb2xlIjoiYWRtaW4iLCJsb2dnZWQiOnRydWUsImlhdCI6MTY2OTg4OTY0NywiZXhwIjoxNzAxNDI1NjQ3fQ.wOQvZnFRZYeOSbpH9tmwh6PZ3ry9lz1jGfszyDwihJ0";
     request(app)
-      .delete(`/api/hotel/637cebffe52247ea19579c32`)
+      .delete(`/api/hotel/637c5aebb683802daad95893`)
      // .auth(token, { type: "bearer" })
       .set('Authorization', `Bearer ${TOKEN}`)
       .expect(200)

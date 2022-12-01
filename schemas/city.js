@@ -25,13 +25,6 @@ const schema = joi.object({
     "any.required": "Population is required",
     "number.base": "Population must be a number",
   }),
-  //ObjectId is a string of hexadecimal caracters with a length of 24
-  userId: joi.string().hex().length(24).required().messages({
-    "string.base": "userId must be a text",
-    "any.required": "userId is required",
-    "string.empty": "userId must not be empty",
-    "string.length": "userId length must be 24 characters long"
-  }),
 });
 
 module.exports = schema;

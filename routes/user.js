@@ -21,6 +21,7 @@ const mustSignIn = require("../middlewares/mustSignIn");
 
 router.post("/signup", validator(schema), accountExists, register);
 router.get("/verify/:code", verify);
+
 router.post(
   "/signin",
   validator(schemaSignIn),
@@ -28,6 +29,7 @@ router.post(
   accountHasBeenVerified,
   signin
 );
+
 router.post(
   "/token",
   passport.authenticate("jwt", { session: false }),
