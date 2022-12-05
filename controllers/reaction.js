@@ -32,23 +32,28 @@ const controller = {
       let reaction = await Reaction.findOne(query);
       if (reaction) {
         let toggle;
+        let reactionModified;
         if (reaction.userId.includes(req.user._id)) {
-          await Reaction.findOneAndUpdate(
+          reactionModified = await Reaction.findOneAndUpdate(
             { _id: reaction._id },
             { $pull: { userId: req.user._id } },
             { new: true }
           );
           toggle = false;
         } else {
-          await Reaction.findOneAndUpdate(
+          reactionModified = await Reaction.findOneAndUpdate(
             { _id: reaction._id },
             { $push: { userId: req.user._id } },
             { new: true }
           );
           toggle = true;
         }
+        reactionModified = {...reactionModified._doc, quantity:reactionModified._doc.userId.length}
+        /* reactionModified = reactionModified.map((reaction) => {
+          return { ...reaction._doc, quantity: reaction._doc.userId.length };
+        }); */
         res.status(200).json({
-          reaction: reaction,
+          reaction: reactionModified,
           message: `Reactioned ${reaction.name}`,
           success: true,
           toggle,
@@ -74,13 +79,10 @@ const controller = {
     try {
       let reactions = await Reaction.find(query);
       if (reactions.length > 0) {
-        let reactionsQuantity = {};
-        reactions.forEach(
-          (reaction) =>
-            (reactionsQuantity[reaction.name] = reaction.userId.length)
-        );
+        reactions = reactions.map((reaction) => {
+          return { ...reaction._doc, quantity: reaction._doc.userId.length };
+        });
         res.status(200).json({
-          reactionsQuantity,
           response: reactions,
           id: req.query.itineraryId,
           success: true,

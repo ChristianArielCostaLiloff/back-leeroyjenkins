@@ -1,4 +1,4 @@
-const { isCommentOwner, noActivity } = require("../config/responses");
+const { isNotCommentOwner, noActivity } = require("../config/responses");
 
 const commentOwner = (model) => [
   async (req, res, next) => {
@@ -7,7 +7,7 @@ const commentOwner = (model) => [
       if (activity.userId.equals(req.user._id)) {
         return next();
       }
-      return isCommentOwner(req, res);
+      return isNotCommentOwner(req, res);
     }
     return noActivity(req, res);
   },
