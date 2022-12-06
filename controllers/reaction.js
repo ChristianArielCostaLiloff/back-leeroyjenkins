@@ -76,6 +76,9 @@ const controller = {
     if (req.query.itineraryId) {
       query = { itineraryId: req.query.itineraryId };
     }
+    if (req.query.userId) {
+      query = { userId: req.query.userId };
+    }
     try {
       let reactions = await Reaction.find(query);
       if (reactions.length > 0) {
@@ -100,6 +103,28 @@ const controller = {
         success: false,
         message: error.message,
         data: error,
+      });
+    }
+  },
+  deleteReaction: async (req, res) => {
+    let { id } = req.params;
+
+    try {
+      let response = await Reaction.findOneAndUpdate(
+        { _id: id },
+        { $pull: { userId: req.user._id } },
+        { new: true }
+      );
+      res.status(200).json({
+        message: `reaction deleted`,
+        success: true,
+        response,
+        toggle: false,
+      });
+    } catch (error) {
+      res.status(400).json({
+        message: error.message,
+        success: false,
       });
     }
   },
