@@ -47,7 +47,7 @@ function verifyResponse(req, res) {
   });
 }
 
-function isCommentOwner(req, res) {
+function isNotCommentOwner(req, res) {
   return res.status(401).json({
     success: false,
     message: "You must be the owner to carry out this operation",
@@ -69,6 +69,6 @@ module.exports = {
   mustSignInResponse,
   invalidCredentialsResponse,
   verifyResponse,
-  isCommentOwner,
+  isNotCommentOwner,
   noActivity,
 };
