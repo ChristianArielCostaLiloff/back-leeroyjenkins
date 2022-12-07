@@ -28,8 +28,12 @@ const controller = {
     if (req.query.itineraryId) {
       query = { ...query, itineraryId: req.query.itineraryId };
     }
+    if (req.query.showId) {
+      query = { ...query, showId: req.query.showId };
+    }
     try {
       let reaction = await Reaction.findOne(query);
+      console.log(reaction)
       if (reaction) {
         let toggle;
         let reactionModified;
@@ -48,10 +52,10 @@ const controller = {
           );
           toggle = true;
         }
-        reactionModified = {...reactionModified._doc, quantity:reactionModified._doc.userId.length}
-        /* reactionModified = reactionModified.map((reaction) => {
-          return { ...reaction._doc, quantity: reaction._doc.userId.length };
-        }); */
+        reactionModified = {
+          ...reactionModified._doc,
+          quantity: reactionModified._doc.userId.length,
+        };
         res.status(200).json({
           reaction: reactionModified,
           message: `Reactioned ${reaction.name}`,
@@ -79,24 +83,56 @@ const controller = {
     if (req.query.userId) {
       query = { userId: req.query.userId };
     }
+    if (req.query.showId) {
+      query = { showId: req.query.showId };
+    }
     try {
-      let reactions = await Reaction.find(query);
-      if (reactions.length > 0) {
-        reactions = reactions.map((reaction) => {
-          return { ...reaction._doc, quantity: reaction._doc.userId.length };
-        });
-        res.status(200).json({
-          response: reactions,
-          id: req.query.itineraryId,
-          success: true,
-          message: `All reactions of the itineraryId ${req.query.itineraryId}`,
-        });
+      if (req.query.userId) {
+        let reactions = await Reaction.find(query)
+          .populate({
+            path: "itineraryId",
+            select: " name photo",
+          })
+          .populate({
+            path: "showId",
+            select: " name photo",
+          });
+        if (reactions.length > 0) {
+          reactions = reactions.map((reaction) => {
+            return { ...reaction._doc, quantity: reaction._doc.userId.length };
+          });
+          res.status(200).json({
+            response: reactions,
+            id: req.query.itineraryId,
+            success: true,
+            message: `All reactions of the itineraryId ${req.query.itineraryId}`,
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            message: "No reactions founded",
+            response: [],
+          });
+        }
       } else {
-        res.status(404).json({
-          success: false,
-          message: "No reactions founded",
-          response: [],
-        });
+        let reactions = await Reaction.find(query);
+        if (reactions.length > 0) {
+          reactions = reactions.map((reaction) => {
+            return { ...reaction._doc, quantity: reaction._doc.userId.length };
+          });
+          res.status(200).json({
+            response: reactions,
+            id: req.query.itineraryId,
+            success: true,
+            message: `All reactions of the itineraryId ${req.query.itineraryId}`,
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            message: "No reactions founded",
+            response: [],
+          });
+        }
       }
     } catch (error) {
       res.status(400).json({
@@ -106,9 +142,31 @@ const controller = {
       });
     }
   },
+  readOne: async (req, res) => {
+    const { id } = req.params;
+    try {
+      let reaction = await Reaction.findOne({ _id: id });
+      if (reaction) {
+        res.status(200).json({
+          success: true,
+          message: "Reaction founded",
+          response: reaction,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Reaction not founded",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
   deleteReaction: async (req, res) => {
     let { id } = req.params;
-
     try {
       let response = await Reaction.findOneAndUpdate(
         { _id: id },
@@ -117,8 +175,8 @@ const controller = {
       );
       res.status(200).json({
         message: `reaction deleted`,
-        success: true,
         response,
+        success: true,
         toggle: false,
       });
     } catch (error) {

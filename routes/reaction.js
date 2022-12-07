@@ -8,6 +8,7 @@ const {
   create,
   update,
   read,
+  readOne,
   deleteReaction,
 } = require("../controllers/reaction");
 
@@ -27,5 +28,6 @@ router.put(
   reactionBelongsUser,
   deleteReaction
 );
+router.route("/:id").get(readOne);
 
 module.exports = router;
