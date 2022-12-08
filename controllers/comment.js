@@ -11,6 +11,9 @@ const controller = {
     if (req.query.showId) {
       query = { showId: req.query.showId };
     }
+    if (req.query.itineraryId) {
+      query = { itineraryId: req.query.itineraryId };
+    }
     if (req.query.order) {
       order = {
         date: req.query.order,
@@ -30,15 +33,13 @@ const controller = {
     }
   },
   create: async (req, res) => {
-    let id = req.body.userId;
-    let { showId, comment, userId, date } = req.body;
-
+    req.body = {
+      ...req.body,
+      userId: req.user._id,
+    };
     try {
-      let user = await User.findOne({ _id: id });
-      userId = user._id;
-
       let comments = await (
-        await Comment.create({ showId, comment, userId, date })
+        await Comment.create(req.body)
       ).populate("userId", {
         photo: 1,
         name: 1,
@@ -60,10 +61,13 @@ const controller = {
     try {
       let one = await Comment.findOneAndUpdate({ _id: id }, req.body, {
         new: true,
+      }).populate("userId", {
+        photo: 1,
+        name: 1,
       });
       if (one) {
         res.status(200).json({
-          id: one._id,
+          response: one,
           success: true,
           message: "Comment modified",
         });
@@ -95,6 +99,32 @@ const controller = {
           res: comment,
           success: false,
           message: "The comment was not found",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+  readOne: async (req, res) => {
+    const { id } = req.params;
+    try {
+      let comment = await Comment.findOne({ _id: id }).populate("userId", {
+        photo: 1,
+        name: 1,
+      });
+      if (comment) {
+        res.status(200).json({
+          success: true,
+          message: "Comment founded",
+          response: comment,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Comment not founded",
         });
       }
     } catch (error) {
