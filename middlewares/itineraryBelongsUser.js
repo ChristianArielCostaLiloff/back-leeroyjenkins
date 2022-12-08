@@ -4,7 +4,6 @@ async function itineraryBelongsUser(req, res, next) {
   let { id } = req.params;
   let { user } = req;
   let itinerary = await Itinerary.findOne({ _id: id });
-  console.log(itinerary);
   if (!user._id.equals(itinerary.userId)) {
     return res.status(400).json({
       success: false,
