@@ -33,7 +33,6 @@ const controller = {
     }
     try {
       let reaction = await Reaction.findOne(query);
-      console.log(reaction)
       if (reaction) {
         let toggle;
         let reactionModified;

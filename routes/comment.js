@@ -3,7 +3,7 @@ const schema = require("../schemas/comment");
 const validator = require("../middlewares/validator");
 const passport = require("../middlewares/passport");
 const Comment = require("../models/Comment");
-let { read, create, update, destroy } = require("../controllers/comment");
+let { read, create, update, destroy, readOne } = require("../controllers/comment");
 const commentOwner = require("../middlewares/commentOwner");
 
 router.get("/", read);
@@ -26,5 +26,6 @@ router.delete(
   commentOwner(Comment),
   destroy
 );
+router.get("/:id", readOne)
 
 module.exports = router;

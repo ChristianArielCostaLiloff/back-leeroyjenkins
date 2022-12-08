@@ -4,7 +4,6 @@ async function showBelongsUser(req, res, next) {
   let { id } = req.params;
   let { user } = req;
   let show = await Show.findOne({ _id: id });
-  console.log(show);
   if (!user._id.equals(show.userId)) {
     return res.status(400).json({
       success: false,
